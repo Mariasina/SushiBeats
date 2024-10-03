@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://scenes/module.tscn" type="PackedScene" id=1]
+
+[node name="Spatial" type="Spatial"]
+transform = Transform( 2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0 )
+
+[node name="CSGPolygon" parent="." instance=ExtResource( 1 )]
+transform = Transform( 2.3836, 0, 0, 0, 0.2, 0, 0, 0, 7, 0, 0, 3.4 )

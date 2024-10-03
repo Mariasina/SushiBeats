@@ -1,0 +1,37 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://scripts/Level.gd" type="Script" id=1]
+[ext_resource path="res://scenes/modules/module2.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/modules/module1.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/modules/module3.tscn" type="PackedScene" id=4]
+[ext_resource path="res://scenes/player.tscn" type="PackedScene" id=5]
+[ext_resource path="res://scenes/modules/module0.tscn" type="PackedScene" id=6]
+[ext_resource path="res://scripts/Camera.gd" type="Script" id=7]
+[ext_resource path="res://assets/songs/bossa_nova_song.mp3" type="AudioStream" id=8]
+
+[node name="main" type="Spatial"]
+
+[node name="Level" type="Spatial" parent="."]
+script = ExtResource( 1 )
+modules = [ ExtResource( 6 ), ExtResource( 3 ), ExtResource( 2 ), ExtResource( 4 ) ]
+
+[node name="InterpolatedCamera" type="InterpolatedCamera" parent="."]
+transform = Transform( -4.28078e-08, 0.528068, -0.849202, 8.8417e-09, 0.849202, 0.528068, 1, 1.5097e-08, -4.10215e-08, -7.27809, 5.57984, -0.132523 )
+fov = 89.4852
+script = ExtResource( 7 )
+
+[node name="KinematicBody" parent="." instance=ExtResource( 5 )]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+volume_db = 2.0
+autoplay = true
+
+[node name="Label" type="Label" parent="."]
+margin_left = 415.0
+margin_top = 198.0
+margin_right = 506.0
+margin_bottom = 212.0
+rect_scale = Vector2( 2, 2 )
+text = "Aperte Espaço"
+percent_visible = 0.0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/bossa_nova_song.mp3-c6f1a79167a85a17c6aad83b43e4fbf9.mp3str"
+
+[deps]
+
+source_file="res://assets/songs/bossa_nova_song.mp3"
+dest_files=[ "res://.import/bossa_nova_song.mp3-c6f1a79167a85a17c6aad83b43e4fbf9.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
