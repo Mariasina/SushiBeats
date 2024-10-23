@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/models/chefKnife02.glb" type="PackedScene" id=2]
+
+[sub_resource type="PhysicsMaterial" id=1]
+
+[sub_resource type="BoxShape" id=2]
+
+[node name="CSGBox" type="Spatial"]
+transform = Transform( 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0 )
+
+[node name="chefKnife02" parent="." instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0 )
+
+[node name="RigidBody" type="RigidBody" parent="chefKnife02" groups=["BeatWall"]]
+physics_material_override = SubResource( 1 )
+gravity_scale = 0.0
+
+[node name="CollisionShape" type="CollisionShape" parent="chefKnife02/RigidBody"]
+transform = Transform( 0.289452, 0, 0, 0, 0.0135579, 2.76828e-09, 0, 2.76828e-09, 0.0768888, 0.0574493, 0.00870442, -3.80483e-10 )
+shape = SubResource( 2 )

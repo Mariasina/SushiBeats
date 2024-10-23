@@ -12,5 +12,5 @@ func _ready():
 
 
 func _process(delta):
-	if Input.is_action_just_pressed("hit"):
-		get_tree().change_scene("res://scenes/main.tscn")
+	if Input.is_action_just_pressed("hit") or Input.is_action_just_pressed("hit_A") or Input.is_action_just_pressed("hit_S") or Input.is_action_just_pressed("hit_D"):
+		get_tree().change_scene("res://scenes/playSong.tscn")

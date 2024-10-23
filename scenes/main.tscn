@@ -1,11 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://scripts/Level.gd" type="Script" id=1]
-[ext_resource path="res://scenes/modules/module2.tscn" type="PackedScene" id=2]
-[ext_resource path="res://scenes/modules/module1.tscn" type="PackedScene" id=3]
-[ext_resource path="res://scenes/modules/module3.tscn" type="PackedScene" id=4]
+[ext_resource path="res://assets/foods.tres" type="MeshLibrary" id=2]
 [ext_resource path="res://scenes/player.tscn" type="PackedScene" id=5]
-[ext_resource path="res://scenes/modules/module0.tscn" type="PackedScene" id=6]
 [ext_resource path="res://scripts/Camera.gd" type="Script" id=7]
 [ext_resource path="res://assets/songs/bossa_nova_song.mp3" type="AudioStream" id=8]
 
@@ -13,7 +10,7 @@
 
 [node name="Level" type="Spatial" parent="."]
 script = ExtResource( 1 )
-modules = [ ExtResource( 6 ), ExtResource( 3 ), ExtResource( 2 ), ExtResource( 4 ) ]
+modules = [ null, null, null, null ]
 
 [node name="InterpolatedCamera" type="InterpolatedCamera" parent="."]
 transform = Transform( -4.28078e-08, 0.528068, -0.849202, 8.8417e-09, 0.849202, 0.528068, 1, 1.5097e-08, -4.10215e-08, -7.27809, 5.57984, -0.132523 )
@@ -35,3 +32,9 @@ margin_bottom = 212.0
 rect_scale = Vector2( 2, 2 )
 text = "Aperte Espaço"
 percent_visible = 0.0
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource( 2 )
+__meta__ = {
+"_editor_clip_": 0
+}

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://assets/songs/bossa_nova_song.mp3" type="AudioStream" id=1]
+[ext_resource path="res://assets/songs/caramel-dancing.mp3" type="AudioStream" id=1]
 [ext_resource path="res://scripts/RecordSong.gd" type="Script" id=2]
 
 [node name="Node2D" type="Node2D"]

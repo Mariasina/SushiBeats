@@ -10,12 +10,19 @@ var recording = false
 var start_time = 0
 var events = []
 var current_index = 0
+var beats_in_contact = []
 
 var delay = 4  # 5 segundos de atraso para começar a música
 var game_start_time = 0  # Armazena o tempo de início do jogo
 
 func _process(delta):
 	generate_level()
+	# Verifica se há beats armazenados e se a tecla correta foi pressionada
+	for beat in beats_in_contact:
+		if Input.is_action_just_pressed(beat.key_associated) and beat.is_touching:
+			print("Tecla correta pressionada:", beat.key_associated)
+			beats_in_contact.erase(beat)  # Remove o beat da lista de colisão
+			beat.queue_free()  # Destrói o beat de forma segura
 
 func _ready():
 	audio_player = $AudioStreamPlayer
@@ -52,7 +59,7 @@ func read_file():
 					# Verificação adicional para garantir que o evento foi lido corretamente
 					if event_time > 0:
 						events.append({"time": event_time, "key": key})
-						print("Evento carregado: Tempo:", event_time, "Tecla:", key)
+						#print("Evento carregado: Tempo:", event_time, "Tecla:", key)
 					else:
 						print("Erro: Tempo do evento não é válido:", event_time)
 				else:
@@ -62,33 +69,46 @@ func read_file():
 		print("Erro ao abrir o arquivo.")
 
 func generate_level():
-	# Calcula o tempo total passado desde o início do jogo
 	var current_game_time = OS.get_ticks_msec() - game_start_time
 
-	
-	# Verifica se ainda há eventos a serem processados
 	while current_index < events.size():
 		var event = events[current_index]
-		# Se o tempo ajustado atinge o tempo do evento, processa o beat
 		if current_game_time >= event["time"]:
-			print("Tecla pressionada em:", event["time"], " - Tecla:", event["key"])
+			var beat = load("res://scenes/beat.tscn").instance()
+
+			# Posicionar o beat conforme a tecla associada
 			match event["key"]:
 				"A":
-					var beat = load("res://scenes/beat.tscn").instance()
 					beat.translation.x = -5
 					beat.translation.z = -10
-					add_child(beat)
+					beat.key_associated = "hit_A"
 				"S":
-					var beat = load("res://scenes/beat.tscn").instance()
 					beat.translation.x = 0
 					beat.translation.z = -10
-					add_child(beat)
+					beat.key_associated = "hit_S"
 				"D":
-					var beat = load("res://scenes/beat.tscn").instance()
 					beat.translation.x = 5
 					beat.translation.z = -10
-					add_child(beat)
-			# Avança para o próximo evento
+					beat.key_associated = "hit_D"
+
+			# Adicionar o beat à cena
+			add_child(beat)
 			current_index += 1
 		else:
 			break
+
+
+func _on_beat_in_contact(beat):
+	# Adiciona o beat à lista de contato apenas se ainda não estiver nela
+	if beats_in_contact.has(beat) == false:
+		beats_in_contact.append(beat)
+		print("Beat armazenado em contato com o BeatWall")
+
+func _on_beat_out_of_contact(beat):
+	# Remove o beat da lista de contato quando ele sai da colisão
+	if beats_in_contact.has(beat):
+		beats_in_contact.erase(beat)
+		print("Beat removido do contato com o BeatWall")
+
+func _on_AudioStreamPlayer_finished():
+	get_tree().change_scene("res://scenes/screens/score.tscn")

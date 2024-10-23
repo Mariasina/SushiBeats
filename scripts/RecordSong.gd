@@ -21,6 +21,7 @@ func _ready():
 	audio_player = $AudioStreamPlayer
 	timer = $Timer
 	
+	
 	# Configurar tempo do timer
 	timer.wait_time = 0.1  # Ajuste o intervalo de gravação se necessário
 
@@ -30,21 +31,21 @@ func _ready():
 
 func _input(event):
 	# Apenas gravar se uma tecla for pressionada
-	if event.is_action_pressed("swipe_left") or event.is_action_pressed("swipe_middle") or event.is_action_pressed("swipe_right"):
+	if event.is_action_pressed("hit_A") or event.is_action_pressed("hit_S") or event.is_action_pressed("hit_D"):
 		if not recording:
 			print("Iniciando gravação...")
 			start_recording()
 
 		# A gravação já está acontecendo, então gravamos o evento
-		if event.is_action_pressed("swipe_left"):
+		if event.is_action_pressed("hit_A"):
 			record_event("A")
 			print("A")
 			a_label.set("theme_override_colors/font_color", color)
-		elif event.is_action_pressed("swipe_middle"):
+		elif event.is_action_pressed("hit_S"):
 			record_event("S")
 			print("S")            
 			s_label.set("theme_override_colors/font_color", color)
-		elif event.is_action_pressed("swipe_right"):
+		elif event.is_action_pressed("hit_D"):
 			record_event("D")
 			print("D")            
 			d_label.set("theme_override_colors/font_color", color)
