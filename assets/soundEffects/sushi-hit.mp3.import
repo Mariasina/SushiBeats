@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/sushi-hit.mp3-e463906318fb9c79ace434e638f59bbb.mp3str"
+
+[deps]
+
+source_file="res://assets/soundEffects/sushi-hit.mp3"
+dest_files=[ "res://.import/sushi-hit.mp3-e463906318fb9c79ace434e638f59bbb.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

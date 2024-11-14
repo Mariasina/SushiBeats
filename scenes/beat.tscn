@@ -1,17 +1,17 @@
 [gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://scripts/Beat.gd" type="Script" id=1]
-[ext_resource path="res://assets/soundEffects/drum.wav" type="AudioStream" id=2]
+[ext_resource path="res://assets/soundEffects/sushi-hit.mp3" type="AudioStream" id=2]
 
 [sub_resource type="SphereShape" id=2]
 
-[node name="CSGSphere" type="Spatial"]
+[node name="CSGSphere" type="Spatial" groups=["Beat"]]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.430445, 0 )
 script = ExtResource( 1 )
 
-[node name="beat" type="AudioStreamPlayer" parent="."]
+[node name="sushiHit" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 2 )
-volume_db = 10.0
+volume_db = 10.636
 
 [node name="Food" type="CSGMesh" parent="."]
 transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0 )
@@ -19,8 +19,8 @@ transform = Transform( 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0 )
 [node name="Area" type="Area" parent="Food"]
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
 
-[node name="CollisionShape" type="CollisionShape" parent="Food/Area" groups=["Beat"]]
-transform = Transform( 0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.288895, 0, 0, 0 )
+[node name="CollisionShape" type="CollisionShape" parent="Food/Area"]
+transform = Transform( 0.331013, 0, 0, 0, 0.149554, 0, 0, 0, 0.149554, 0, 0, 0 )
 shape = SubResource( 2 )
 
 [connection signal="body_entered" from="Food/Area" to="." method="_on_Area_body_entered"]

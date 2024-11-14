@@ -1,28 +1,56 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=60 format=2]
 
 [ext_resource path="res://assets/songs/caramel-dancing.mp3" type="AudioStream" id=1]
 [ext_resource path="res://scripts/PlaySong.gd" type="Script" id=2]
 [ext_resource path="res://scenes/beatWall.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/models/table.glb" type="PackedScene" id=4]
-[ext_resource path="res://assets/models/potCastIron.glb" type="PackedScene" id=5]
+[ext_resource path="res://assets/fonts/Montserrat-Regular.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://assets/models/hashi.glb" type="PackedScene" id=5]
+[ext_resource path="res://assets/models/hashiPair.glb" type="PackedScene" id=6]
+[ext_resource path="res://assets/texures/esteira-vertical.png" type="Texture" id=7]
+[ext_resource path="res://assets/shaders/track.tres" type="Shader" id=8]
+[ext_resource path="res://assets/texures/sushicat-both.png" type="Texture" id=9]
+[ext_resource path="res://assets/models/sushiServingBoard.glb" type="PackedScene" id=10]
+[ext_resource path="res://assets/texures/tiles.png" type="Texture" id=11]
+[ext_resource path="res://assets/texures/sushicat-left.png" type="Texture" id=12]
+[ext_resource path="res://assets/texures/sushicat-right.png" type="Texture" id=13]
+[ext_resource path="res://assets/models/cuttingStone.glb" type="PackedScene" id=14]
+[ext_resource path="res://assets/models/bench02.glb" type="PackedScene" id=15]
+[ext_resource path="res://assets/models/plateCeramic.glb" type="PackedScene" id=16]
+[ext_resource path="res://assets/texures/sushicat.png" type="Texture" id=17]
+[ext_resource path="res://assets/models/customItems/wallLib.tres" type="MeshLibrary" id=18]
+[ext_resource path="res://assets/models/table.glb" type="PackedScene" id=19]
+[ext_resource path="res://assets/models/foodItems/hossomakiSalmonRoll.glb" type="PackedScene" id=20]
+[ext_resource path="res://assets/models/soySauceThing.glb" type="PackedScene" id=21]
+[ext_resource path="res://assets/models/foodItems/sushi/hossomakiSalmon.glb" type="PackedScene" id=22]
+[ext_resource path="res://assets/models/cup.glb" type="PackedScene" id=23]
+[ext_resource path="res://assets/models/cuttingBoard02.glb" type="PackedScene" id=24]
+[ext_resource path="res://assets/models/foodItems/sushi/niguiriSalmon.glb" type="PackedScene" id=25]
+[ext_resource path="res://assets/models/foodItems/sushi/uramakiCocumber.glb" type="PackedScene" id=26]
+[ext_resource path="res://assets/models/bunkaKnife.glb" type="PackedScene" id=27]
+[ext_resource path="res://assets/models/foodItems/sushi/niguiriSalmonWithNori.glb" type="PackedScene" id=28]
+[ext_resource path="res://assets/models/foodItems/sushi/uramakiDragon.glb" type="PackedScene" id=29]
+[ext_resource path="res://assets/fonts/batmfa__.ttf" type="DynamicFontData" id=30]
+[ext_resource path="res://assets/soundEffects/sushi-hit.mp3" type="AudioStream" id=31]
 
-[sub_resource type="PanoramaSky" id=1]
+[sub_resource type="DynamicFont" id=21]
+size = 23
+font_data = ExtResource( 30 )
 
-[sub_resource type="Environment" id=2]
-background_mode = 4
-background_sky = SubResource( 1 )
-background_color = Color( 0.894118, 0.631373, 0.631373, 1 )
-background_canvas_max_layer = -1
+[sub_resource type="DynamicFont" id=22]
+size = 30
+extra_spacing_space = 50
+font_data = ExtResource( 4 )
 
-[sub_resource type="Shader" id=5]
+[sub_resource type="Shader" id=17]
 code = "shader_type canvas_item;
 
 uniform sampler2D noise_img;
-uniform float speed = 1.0;
+uniform float speed = 2.0;
+uniform vec4 smoke_color: hint_color;
 
 void fragment(){
 	vec2 uv1 = vec2(UV.x + TIME * speed, UV.y);
-	vec2 uv2 = vec2(UV.x - TIME * speed, UV.y);
+	vec2 uv2 = vec2(UV.x - TIME * speed, UV.y + TIME * speed);
 	vec2 uv3 = vec2(UV.x, UV.y + TIME * speed);
 	
 	
@@ -33,78 +61,215 @@ void fragment(){
 	
 	vec3 new_color = vec3(noise_r, noise_g, noise_b);
 	
-	COLOR.rgb = new_color;
-	COLOR.a = texture(TEXTURE, UV).a;
+	float new_alpha = noise_r * noise_g * noise_b;
+	
+	//COLOR.a = texture(TEXTURE, UV).a;
+	COLOR.rgb = smoke_color.rgb;
+	COLOR.a = new_alpha * 5.0 * texture(TEXTURE, UV).a;
 }"
 
 [sub_resource type="OpenSimplexNoise" id=6]
+seed = 5
+octaves = 6
+period = 256.0
+persistence = 0.007
+lacunarity = 0.92
 
-[sub_resource type="NoiseTexture" id=7]
+[sub_resource type="NoiseTexture" id=18]
 seamless = true
 noise = SubResource( 6 )
 
 [sub_resource type="ShaderMaterial" id=8]
-shader = SubResource( 5 )
+shader = SubResource( 17 )
 shader_param/speed = 0.1
-shader_param/noise_img = SubResource( 7 )
+shader_param/smoke_color = Color( 0.0823529, 0.545098, 0.729412, 1 )
+shader_param/noise_img = SubResource( 18 )
 
-[sub_resource type="OpenSimplexNoise" id=3]
+[sub_resource type="OpenSimplexNoise" id=19]
+seed = 756756
+octaves = 9
+period = 107.7
+persistence = 0.591
+lacunarity = 2.93
 
 [sub_resource type="NoiseTexture" id=4]
 seamless = true
-noise = SubResource( 3 )
+noise = SubResource( 19 )
+
+[sub_resource type="PanoramaSky" id=20]
+
+[sub_resource type="Environment" id=2]
+background_mode = 4
+background_sky = SubResource( 20 )
+background_color = Color( 0.894118, 0.631373, 0.631373, 1 )
+background_canvas_max_layer = -1
+ambient_light_energy = 1.62
+fog_color = Color( 0.807843, 0.878431, 0.94902, 1 )
+
+[sub_resource type="SpatialMaterial" id=13]
+albedo_color = Color( 0.984314, 1, 0.713726, 1 )
+albedo_texture = ExtResource( 11 )
+
+[sub_resource type="PlaneMesh" id=14]
+material = SubResource( 13 )
+
+[sub_resource type="SpatialMaterial" id=27]
+albedo_texture = ExtResource( 11 )
+metallic = 0.08
+metallic_specular = 0.36
+roughness = 0.46
+
+[sub_resource type="SpatialMaterial" id=28]
+albedo_color = Color( 0.243137, 0.12549, 0.0156863, 1 )
+metallic = 0.38
+metallic_specular = 0.57
+roughness = 0.69
+
+[sub_resource type="CubeMesh" id=29]
+material = SubResource( 28 )
+
+[sub_resource type="PlaneMesh" id=9]
+
+[sub_resource type="ShaderMaterial" id=11]
+shader = ExtResource( 8 )
+shader_param/albedo = Color( 1, 1, 1, 1 )
+shader_param/specular = 0.41
+shader_param/metallic = 0.64
+shader_param/roughness = 0.5
+shader_param/point_size = 1.0
+shader_param/uv1_scale = Vector3( 1, 1, 1 )
+shader_param/uv1_offset = Vector3( 0, 0, 0 )
+shader_param/speed = 0.2
+shader_param/texture_albedo = ExtResource( 7 )
+
+[sub_resource type="SpatialMaterial" id=25]
+albedo_color = Color( 0.839216, 0.396078, 0.396078, 1 )
+
+[sub_resource type="CubeMesh" id=26]
+material = SubResource( 25 )
+size = Vector3( 1, 1, 1 )
+
+[sub_resource type="AtlasTexture" id=30]
+flags = 7
+atlas = ExtResource( 17 )
+region = Rect2( 0, 0, 700, 900 )
+
+[sub_resource type="AtlasTexture" id=31]
+flags = 4
+atlas = ExtResource( 12 )
+region = Rect2( 0, 0, 700, 900 )
+
+[sub_resource type="AtlasTexture" id=32]
+flags = 4
+atlas = ExtResource( 13 )
+region = Rect2( 0, 0, 700, 900 )
+
+[sub_resource type="AtlasTexture" id=33]
+flags = 4
+atlas = ExtResource( 9 )
+region = Rect2( 0, 0, 700, 900 )
+
+[sub_resource type="SpriteFrames" id=34]
+animations = [ {
+"frames": [ SubResource( 30 ), SubResource( 31 ), SubResource( 32 ), SubResource( 33 ) ],
+"loop": false,
+"name": "default",
+"speed": 5.0
+} ]
+
+[sub_resource type="CubeMesh" id=38]
+
+[sub_resource type="SpatialMaterial" id=39]
+albedo_color = Color( 1, 0.898039, 0.580392, 1 )
+
+[sub_resource type="PhysicsMaterial" id=37]
+
+[sub_resource type="BoxShape" id=35]
+margin = 0.001
 
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 2 )
 
 [node name="Timer" type="Timer" parent="."]
 
+[node name="knife" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 31 )
+volume_db = 9.223
+
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 1 )
+volume_db = -8.273
 
-[node name="time" type="Label" parent="."]
-margin_right = 40.0
-margin_bottom = 14.0
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 30
+custom_constants/margin_top = 30
+custom_constants/margin_left = 30
+custom_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
+margin_left = 30.0
+margin_top = 30.0
+margin_right = 1336.0
+margin_bottom = 738.0
+
+[node name="score" type="Label" parent="Control/MarginContainer/VBoxContainer"]
+margin_right = 1306.0
+margin_bottom = 24.0
+custom_fonts/font = SubResource( 21 )
 text = "0"
 
-[node name="InterpolatedCamera" type="InterpolatedCamera" parent="."]
-transform = Transform( 1, 0, 0, 0, 0.87467, 0.484718, 0, -0.484718, 0.87467, 0, 4.22712, 14.201 )
-fov = 128.229
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
+margin_top = 28.0
+margin_right = 1306.0
+margin_bottom = 28.0
+alignment = 1
 
-[node name="BeatWallS" parent="." instance=ExtResource( 3 )]
-transform = Transform( 6, 0, 0, 0, 6, 0, 0, 0, 6, -0.5, 0, 12.295 )
+[node name="A" type="Label" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
+visible = false
+margin_left = 503.0
+margin_right = 803.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 300, 600 )
+custom_fonts/font = SubResource( 22 )
+text = "A"
+align = 1
+valign = 2
 
-[node name="BeatWallD" parent="." instance=ExtResource( 3 )]
-transform = Transform( 6, 0, 0, 0, 6, 0, 0, 0, 6, -5, 0, 12.283 )
+[node name="S" type="Label" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
+visible = false
+margin_left = 655.0
+margin_right = 955.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 300, 600 )
+custom_fonts/font = SubResource( 22 )
+text = "S"
+align = 1
+valign = 2
 
-[node name="BeatWallA" parent="." instance=ExtResource( 3 )]
-transform = Transform( 6, 0, 0, 0, 6, 0, 0, 0, 6, 5, 0, 12.295 )
-
-[node name="table" parent="." instance=ExtResource( 4 )]
-transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 7, 25.8864, 0, 12.244 )
-
-[node name="potCastIron" parent="." instance=ExtResource( 5 )]
-transform = Transform( 6, 0, 0, 0, 6, 0, 0, 0, 6, 25.7145, 3.62647, 12.3359 )
+[node name="D" type="Label" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
+visible = false
+margin_left = 807.0
+margin_right = 1107.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 300, 600 )
+custom_fonts/font = SubResource( 22 )
+text = "D"
+align = 1
+valign = 2
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 0.999724, 0.0235074, 9.06906e-10, -0.017802, 0.757082, 0.653077, 0.0153522, -0.652897, 0.757291, 0, 11.8175, 13.0362 )
-light_color = Color( 0.964706, 1, 0.564706, 1 )
-light_bake_mode = 2
-shadow_enabled = true
-shadow_color = Color( 0.152941, 0.266667, 0.517647, 1 )
-
-[node name="DirectionalLight2" type="DirectionalLight" parent="."]
-transform = Transform( 0.195611, 0.643195, -0.740295, -0.017802, 0.757082, 0.653077, 0.98052, -0.11457, 0.159544, 19.0925, 8.35929, 13.0362 )
-light_color = Color( 0.964706, 1, 0.564706, 1 )
-light_bake_mode = 2
-shadow_enabled = true
-shadow_color = Color( 0.152941, 0.266667, 0.517647, 1 )
-
-[node name="CSGBox" type="CSGBox" parent="."]
-transform = Transform( 8.17725, 0, 0, 0, 0.0858369, 0, 0, 0, 10.4557, 0, -0.606925, 5.30532 )
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource( 2 )
+transform = Transform( 0.923594, -0.277958, -0.264032, 0.38167, 0.60185, 0.701502, -0.0360804, -0.748676, 0.661953, -9.28674, 84.8969, 98.5439 )
+visible = false
+light_energy = 0.8
+light_specular = 3.3
+shadow_color = Color( 0.164706, 0.160784, 0.133333, 1 )
+shadow_bias = -1.65
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = -1
@@ -114,5 +279,442 @@ material = SubResource( 8 )
 position = Vector2( 698.5, 589 )
 scale = Vector2( 2.72852, 2.30078 )
 texture = SubResource( 4 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource( 2 )
+
+[node name="InterpolatedCamera" type="InterpolatedCamera" parent="."]
+transform = Transform( 1, 0, 0, 0, 0.936391, 0.350959, 0, -0.350959, 0.936391, 0, 4.584, 17.424 )
+fov = 94.8
+
+[node name="Ground" type="MeshInstance" parent="."]
+transform = Transform( 135.877, 0, 0, 0, 70, 0, 0, 0, 141.414, 0.00200272, -4.08498, 42.2685 )
+mesh = SubResource( 14 )
+material/0 = SubResource( 27 )
+
+[node name="bench08" parent="." instance=ExtResource( 15 )]
+transform = Transform( -5.65088e-07, 0, -12.9277, 0, 5.87992, 0, 12.9277, 0, -5.65088e-07, -3.10235, -4.01612, -32.448 )
+
+[node name="bench09" parent="bench08" instance=ExtResource( 15 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.776563 )
+
+[node name="bench03" parent="bench08" instance=ExtResource( 15 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.32969, 0, 1.66406 )
+
+[node name="bench04" parent="bench08" instance=ExtResource( 15 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.58086, 0, 1.66406 )
+
+[node name="bench06" parent="bench08" instance=ExtResource( 15 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.818165, 0, 1.66406 )
+
+[node name="bench05" parent="bench08" instance=ExtResource( 15 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.07852, 0, 1.66406 )
+
+[node name="bench07" parent="bench08" instance=ExtResource( 15 )]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.84121, 0, 1.66406 )
+
+[node name="Ceiling" type="CSGMesh" parent="."]
+transform = Transform( 137.439, 0, 0, 0, 0.986067, 0, 0, 0, 135.161, 0, 41.6345, 25.0594 )
+mesh = SubResource( 29 )
+
+[node name="TrackA" type="MeshInstance" parent="."]
+transform = Transform( 2.5, 0, 0, 0, 0.086, 0, 0, 0, 16.9648, -5, -0.607, -0.870539 )
+mesh = SubResource( 9 )
+skeleton = NodePath("")
+material/0 = SubResource( 11 )
+
+[node name="TrackS" type="MeshInstance" parent="."]
+transform = Transform( 2.5, 0, 0, 0, 0.086, 0, 0, 0, 16.9648, 0, -0.607, -0.870539 )
+mesh = SubResource( 9 )
+skeleton = NodePath("")
+material/0 = SubResource( 11 )
+
+[node name="TrackD" type="MeshInstance" parent="."]
+transform = Transform( 2.5, 0, 0, 0, 0.086, 0, 0, 0, 16.9648, 5, -0.607, -0.870539 )
+mesh = SubResource( 9 )
+skeleton = NodePath("")
+material/0 = SubResource( 11 )
+
+[node name="TrackDividerLeft" type="CSGMesh" parent="."]
+transform = Transform( 0.630746, 0, 0, 0, 0.84609, 0, 0, 0, 33.6701, -7.77101, -0.735985, -1.03621 )
+mesh = SubResource( 26 )
+
+[node name="TrackDividerRight" type="CSGMesh" parent="."]
+transform = Transform( 0.631679, 0, 0, 0, 0.847342, 0, 0, 0, 34.0971, 7.7853, -0.735985, -1.03621 )
+mesh = SubResource( 26 )
+
+[node name="TrackDividerRight2" type="CSGMesh" parent="."]
+transform = Transform( -2.7631e-08, 0, 16.2288, 0, 0.847506, 0, -0.632123, 0, -7.09385e-07, 0, -0.736, -18.178 )
+mesh = SubResource( 26 )
+
+[node name="BeatWallA" parent="." groups=["BeatWallA"] instance=ExtResource( 3 )]
+transform = Transform( 6, 0, 0, 0, 5.89274, 1.12943, 0, -1.12943, 5.89274, -5, 0.5, 12.283 )
+
+[node name="BeatWallS" parent="." groups=["BeatWallS"] instance=ExtResource( 3 )]
+transform = Transform( 6, 0, 0, 0, 5.89274, 1.12943, 0, -1.12943, 5.89274, 0, 0.5, 12.295 )
+
+[node name="BeatWallD" parent="." groups=["BeatWallD"] instance=ExtResource( 3 )]
+transform = Transform( 6, 0, 0, 0, 5.89274, 1.12943, 0, -1.12943, 5.89274, 5, 0.5, 12.2949 )
+
+[node name="cuttingStone" parent="." instance=ExtResource( 14 )]
+transform = Transform( 12.4141, 0, 0.722504, 0, 5, 0, -0.42664, 0, 31.6267, 14.2145, -3.69292, 1.19209e-07 )
+
+[node name="cuttingStone2" parent="." instance=ExtResource( 14 )]
+transform = Transform( 2.11754e-06, 0, -41.1254, 0, 5, 0, 12.4214, 0, 4.14842e-06, 46.2145, -3.69292, -19 )
+
+[node name="cuttingBoard02" parent="cuttingStone2" instance=ExtResource( 24 )]
+transform = Transform( 0.524947, 0, 5.36116e-08, 0, 1.21896, 0, 4.92166e-09, 0, 0.375925, -1.19209e-07, 0.397753, 0.565226 )
+
+[node name="hossomakiSalmon" parent="cuttingStone2/cuttingBoard02" instance=ExtResource( 22 )]
+transform = Transform( 2.33172, 0, 4.81935e-07, 0, 1, 0, 8.30436e-08, 0, 0.919624, 0.148122, 0.0758279, -0.0167308 )
+
+[node name="hossomakiSalmon2" parent="cuttingStone2/cuttingBoard02" instance=ExtResource( 22 )]
+transform = Transform( 2.33172, 0, 4.81935e-07, 0, 1, 0, 8.30435e-08, 0, 0.919624, 0.215894, 0.0758279, 0.0682837 )
+
+[node name="niguiriSalmon" parent="cuttingStone2/cuttingBoard02" instance=ExtResource( 25 )]
+transform = Transform( 0.655918, 0, -0.413112, 0, 3.39967, 0, 0.0245037, 0, 1.40505, -0.0545146, 0.0542678, -0.157035 )
+
+[node name="niguiriSalmonWithNori" parent="cuttingStone2/cuttingBoard02" instance=ExtResource( 28 )]
+transform = Transform( 0.624592, 0, 4.36698e-08, 0, 3.4, 0, 2.88244e-09, 0, 1.50262, 0.10612, 0.0562956, -0.144085 )
+
+[node name="uramakiCocumber" parent="cuttingStone2/cuttingBoard02" instance=ExtResource( 26 )]
+transform = Transform( 1.84751, 0, 3.75806e-07, 0, 2.39548, 0, 6.47561e-08, 0, 0.746386, -0.0490353, 0.0630582, -0.0398858 )
+
+[node name="uramakiDragon" parent="cuttingStone2/cuttingBoard02" instance=ExtResource( 29 )]
+transform = Transform( 0.473006, 1.13718, -9.90963e-08, -1.42079, 0.271222, -4.84904e-07, -1.70756e-08, 6.68762e-08, 0.763361, -0.0790474, 0.0924168, 0.069667 )
+
+[node name="uramakiDragon2" parent="cuttingStone2/cuttingBoard02" instance=ExtResource( 29 )]
+transform = Transform( 0.473006, 1.13718, -9.90962e-08, -1.42079, 0.271222, -4.84904e-07, -1.70756e-08, 6.68762e-08, 0.763361, 0.0397058, 0.0924168, 0.125962 )
+
+[node name="bunkaKnife" parent="cuttingStone2" instance=ExtResource( 27 )]
+transform = Transform( -0.569414, 0, 0.067638, 0, 1, 0, -0.0131776, 0, -0.215176, 0.0488431, 0.467566, 0.435695 )
+
+[node name="SpotLight" type="SpotLight" parent="."]
+transform = Transform( -3.87225e-09, 0.995321, -0.0966275, 3.98865e-08, 0.0966275, 0.995321, 1, -1.33227e-15, -4.0074e-08, 5.91247, 7.52741, -22.3394 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 2.6
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 11.487
+spot_attenuation = 1.18921
+spot_angle = 29.25
+spot_angle_attenuation = 0.659754
+
+[node name="Table" parent="." instance=ExtResource( 10 )]
+transform = Transform( 115.069, 0, 0, 0, 49.4107, 0, 0, 0, 125.513, -3.6887, -4.00253, -1.03621 )
+
+[node name="plateCeramic7" parent="Table" instance=ExtResource( 16 )]
+transform = Transform( -4.83735e-09, 0, -0.131553, 0, 1, 0, 0.110666, 0, -5.75038e-09, 0.0905946, 0.067561, -0.169729 )
+
+[node name="cup" parent="Table/plateCeramic7" instance=ExtResource( 23 )]
+transform = Transform( 0.9, 0, -9.9282e-09, 0, 0.5, 0, 9.92823e-09, 0, 0.9, 0.157435, -0.00155684, 0.221395 )
+
+[node name="hashiPair" parent="Table/plateCeramic7" instance=ExtResource( 6 )]
+transform = Transform( 0.67, 0, -1.2279e-14, 0, 0.325, 0, 1.2279e-14, 0, 0.67, -0.0585474, -0.00155684, 0.221395 )
+
+[node name="SpotLight2" type="SpotLight" parent="Table"]
+transform = Transform( -3.36516e-11, 0.00864979, -0.000839737, 8.07244e-10, 0.0019556, 0.0201438, 0.0079673, -2.12292e-17, -3.19282e-10, -0.00243497, 0.233349, -0.169729 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 2.6
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 11.487
+spot_attenuation = 1.18921
+spot_angle = 29.25
+spot_angle_attenuation = 0.659754
+
+[node name="plateCeramic6" parent="Table" instance=ExtResource( 16 )]
+transform = Transform( -4.83735e-09, 0, -0.131553, 0, 1, 0, 0.110666, 0, -5.75038e-09, 0.00558187, 0.067561, -0.169729 )
+
+[node name="hashi" parent="Table/plateCeramic6" instance=ExtResource( 5 )]
+transform = Transform( 0.67, 0, 1.42109e-14, 0, 0.325, 0, -3.55271e-15, 0, 0.67, -0.0443619, -0.00290236, 0.189698 )
+
+[node name="hashi2" parent="Table/plateCeramic6" instance=ExtResource( 5 )]
+transform = Transform( 0.67, 0, 1.42109e-14, 0, 0.325, 0, -3.55271e-15, 0, 0.67, -0.0443619, -0.00290236, -0.185274 )
+
+[node name="SpotLight3" type="SpotLight" parent="Table"]
+transform = Transform( -3.36516e-11, 0.00864979, -0.000839737, 8.07244e-10, 0.0019556, 0.0201438, 0.0079673, -2.12292e-17, -3.19282e-10, -0.09785, 0.233349, -0.164262 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 2.6
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 11.487
+spot_attenuation = 1.18921
+spot_angle = 29.25
+spot_angle_attenuation = 0.659754
+
+[node name="plateCeramic5" parent="Table" instance=ExtResource( 16 )]
+transform = Transform( -0.120654, 0, 0, 0, 1, 0, 0, 0, -0.120654, -0.0913359, 0.067561, -0.163429 )
+
+[node name="soySauceThing" parent="Table/plateCeramic5" instance=ExtResource( 21 )]
+transform = Transform( 3.7749e-08, 0, -0.5, 0, 0.2, 0, 0.5, 0, 3.7749e-08, -0.158362, -0.00182418, -0.234334 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="hashiPair" parent="Table/plateCeramic5" instance=ExtResource( 6 )]
+transform = Transform( -0.476313, -0.249283, -0.489237, -0.0295382, 0.317362, -0.0303397, 0.421097, 0, -0.487776, 0.12758, 0.0111249, -0.0511477 )
+
+[node name="SpotLight4" type="SpotLight" parent="Table"]
+transform = Transform( -3.36516e-11, 0.00864979, -0.000839737, 8.07244e-10, 0.0019556, 0.0201438, 0.0079673, -2.12292e-17, -3.19282e-10, -0.09785, 0.233349, -0.0888147 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 2.6
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 11.487
+spot_attenuation = 1.18921
+spot_angle = 29.25
+spot_angle_attenuation = 0.659754
+
+[node name="plateCeramic4" parent="Table" instance=ExtResource( 16 )]
+transform = Transform( -0.120654, 0, 0, 0, 1, 0, 0, 0, -0.120654, -0.0913359, 0.067561, -0.0878222 )
+
+[node name="cup2" parent="Table/plateCeramic4" instance=ExtResource( 23 )]
+transform = Transform( 4.69085e-08, 0, 0.9813, 0, 0.5, 0, -0.825496, 0, 5.20004e-08, -0.193589, -0.00155684, 0.185698 )
+
+[node name="hashiPair" parent="Table/plateCeramic4" instance=ExtResource( 6 )]
+transform = Transform( -0.67, 0, 5.85733e-08, 0, 0.325, 0, -5.85732e-08, 0, -0.670001, 0.0615327, -0.0024705, -0.235051 )
+
+[node name="SpotLight5" type="SpotLight" parent="Table"]
+transform = Transform( -3.36516e-11, 0.00864979, -0.000839737, 8.07244e-10, 0.0019556, 0.0201438, 0.0079673, -2.12292e-17, -3.19282e-10, -0.09785, 0.233349, -0.0068067 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 2.6
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 11.487
+spot_attenuation = 1.18921
+spot_angle = 29.25
+spot_angle_attenuation = 0.659754
+
+[node name="plateCeramic3" parent="Table" instance=ExtResource( 16 )]
+transform = Transform( -0.120654, 0, 0, 0, 1, 0, 0, 0, -0.120654, -0.0913359, 0.067561, -0.0077154 )
+
+[node name="soySauceThing2" parent="Table/plateCeramic3" instance=ExtResource( 21 )]
+transform = Transform( 3.7749e-08, 0, -0.5, 0, 0.2, 0, 0.5, 0, 3.7749e-08, -0.203883, -0.000142528, -0.295521 )
+
+[node name="hashiPair" parent="Table/plateCeramic3" instance=ExtResource( 6 )]
+transform = Transform( -0.577807, 0, -0.36996, 0, 0.325, 0, 0.310949, 0, -0.577807, 0, -0.00105902, -0.279119 )
+
+[node name="SpotLight6" type="SpotLight" parent="Table"]
+transform = Transform( -3.36516e-11, 0.00864979, -0.000839737, 8.07244e-10, 0.0019556, 0.0201438, 0.0079673, -2.12292e-17, -3.19282e-10, -0.09785, 0.233349, 0.0686407 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 2.6
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 11.487
+spot_attenuation = 1.18921
+spot_angle = 29.25
+spot_angle_attenuation = 0.659754
+
+[node name="plateCeramic2" parent="Table" instance=ExtResource( 16 )]
+transform = Transform( -0.120654, 0, 0, 0, 1, 0, 0, 0, -0.120654, -0.0913359, 0.067561, 0.067891 )
+
+[node name="hashi" parent="Table/plateCeramic2" instance=ExtResource( 5 )]
+transform = Transform( -0.669968, 0, 5.85766e-08, 0, 0.325, 0, -5.85705e-08, 0, -0.670038, 0.0603044, 0, -0.200413 )
+
+[node name="hashi2" parent="Table/plateCeramic2" instance=ExtResource( 5 )]
+transform = Transform( -0.669968, 0, 5.85766e-08, 0, 0.325, 0, -5.85705e-08, 0, -0.670038, 0.0603044, 0, -0.234967 )
+
+[node name="plateCeramic" parent="Table" instance=ExtResource( 16 )]
+transform = Transform( -0.120654, 0, 0, 0, 1, 0, 0, 0, -0.120654, -0.0913359, 0.067561, 0.142597 )
+
+[node name="SpotLight7" type="SpotLight" parent="."]
+transform = Transform( -3.87226e-09, 0.995321, -0.0966274, 3.98865e-08, 0.0966274, 0.995321, 1, 1.24345e-14, -4.0074e-08, 14.2964, 10.7152, -0.85573 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 1.2
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 22.572
+spot_attenuation = 1.18921
+spot_angle = 65.25
+spot_angle_attenuation = 0.659754
+
+[node name="sushiServingBoard" parent="." instance=ExtResource( 10 )]
+transform = Transform( 11.9943, 0, 0, 0, 7.3729, 0, 0, 0, 21.2824, 14.1824, -1.47735, -1.15356 )
+
+[node name="hossomakiSalmonRoll" parent="sushiServingBoard" instance=ExtResource( 20 )]
+transform = Transform( -5.85198e-08, 0, 1.33878, 0, 1.66667, 0, -0.754508, 0, -3.29806e-08, -0.0379001, 0.0689084, -0.0511893 )
+
+[node name="hossomakiSalmon" parent="sushiServingBoard" instance=ExtResource( 22 )]
+transform = Transform( 2.00817, 0, 0, 0, -1.09278e-07, 2.5, 0, -1.13176, -4.94709e-08, -0.0237594, 0.10767, 0.104696 )
+
+[node name="hossomakiSalmon2" parent="sushiServingBoard" instance=ExtResource( 22 )]
+transform = Transform( 0.0833729, 0, 0, 0, 0.135632, 0, 0, 0, 0.0469872, -1.18243, 0.200376, 0.0542026 )
+
+[node name="GridMap" type="GridMap" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 1 )
+mesh_library = ExtResource( 18 )
+cell_size = Vector3( 15, 15, 15 )
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+data = {
+"cells": PoolIntArray( 8, 0, 1441798, 65527, 0, 327686, 65544, 0, 1441798, 131061, 0, 1441798, 131062, 0, 1441798, 131063, 0, 1441798, 131080, 0, 1441798, 196599, 0, 327686, 196616, 0, 1441798, 262134, 0, 1441798, 262135, 0, 1441798, 65523, 1, 1441798, 65524, 1, 1441798, 131061, 1, 1441798, 131080, 1, 1441798, 196616, 1, 1441798, -65525, 65491, 6, -65520, 65491, 6, 65527, 65513, 6, 65532, 65513, 6, 131076, 65518, 131078, 131075, 65520, 131078, 131074, 65521, 131078, 131055, 65525, 1441798, 196602, 65525, 655366, 196593, 65526, 1441798, 131057, 65527, 1441798, 262136, 65527, 655366, 262137, 65527, 655366, 131059, 65529, 1441798, 196599, 65529, 1441798, 196600, 65529, 131078, 196601, 65529, 655366, 196604, 65529, 655366, 262135, 65529, 1441798, 0, 65530, 6, 1, 65530, 6, 2, 65530, 6, 3, 65530, 6, 4, 65530, 6, 5, 65530, 6, 6, 65530, 6, 7, 65530, 6, 8, 65530, 327686, 65527, 65530, 1441798, 65528, 65530, 6, 65529, 65530, 6, 65530, 65530, 6, 65531, 65530, 6, 65532, 65530, 6, 65533, 65530, 6, 65534, 65530, 6, 65535, 65530, 6, 65536, 65530, 6, 65537, 65530, 6, 65538, 65530, 6, 65539, 65530, 6, 65542, 65530, 131078, 65543, 65530, 6, 65544, 65530, 327686, 131062, 65530, 327686, 131063, 65530, 327686, 131064, 65530, 6, 131065, 65530, 131078, 131068, 65530, 655366, 131069, 65530, 6, 131070, 65530, 6, 131071, 65530, 6, 131072, 65530, 6, 131073, 65530, 6, 131074, 65530, 6, 131075, 65530, 6, 131076, 65530, 131078, 131077, 65530, 131078, 131078, 65530, 131078, 131079, 65530, 6, 131080, 65530, 1441798, 196599, 65530, 1441798, 196600, 65530, 6, 196601, 65530, 131078, 196602, 65530, 131078, 196603, 65530, 655366, 196604, 65530, 6, 196605, 65530, 6, 196606, 65530, 6, 196607, 65530, 6, 196608, 65530, 6, 196609, 65530, 6, 196610, 65530, 6, 196611, 65530, 6, 196612, 65530, 6, 196613, 65530, 6, 196614, 65530, 6, 196615, 65530, 6, 196616, 65530, 1441798, 262135, 65530, 1441798, 262136, 65530, 6, 262137, 65530, 6, 262138, 65530, 6, 262139, 65530, 6, 262140, 65530, 6, 262141, 65530, 6, 262142, 65530, 6, 262143, 65530, 6, 8, 65531, 1441798, 65527, 65531, 1441798, 65544, 65531, 327686, 131059, 65531, 1441798, 131062, 65531, 1441798, 131063, 65531, 1441798, 131080, 65531, 1441798, 196599, 65531, 1441798, 196616, 65531, 1441798, 262135, 65531, 1441798, 8, 65532, 1441798, 65527, 65532, 1441798, 65544, 65532, 1441798, 131063, 65532, 1441798, 131080, 65532, 1441798, 196599, 65532, 1441798, 196616, 65532, 1441798, 262135, 65532, 1441798, 8, 65533, 1441798, 65525, 65533, 1441798, 65526, 65533, 1441798, 65527, 65533, 1441798, 65544, 65533, 1441798, 131063, 65533, 1441798, 131080, 65533, 1441798, 196599, 65533, 1441798, 196616, 65533, 1441798, 262135, 65533, 1441798, 8, 65534, 1441798, 65526, 65534, 1441798, 65527, 65534, 1441798, 65544, 65534, 1441798, 131063, 65534, 1441798, 131080, 65534, 1441798, 196598, 65534, 1441798, 196599, 65534, 1441798, 196616, 65534, 1441798, 262135, 65534, 327686, 8, 65535, 1441798, 65525, 65535, 1441798, 65526, 65535, 1441798, 65527, 65535, 1441798, 65544, 65535, 1441798, 131062, 65535, 1441798, 131063, 65535, 1441798, 131080, 65535, 1441798, 196598, 65535, 1441798, 196599, 65535, 327686, 196616, 65535, 1441798, 262134, 65535, 1441798, 262135, 65535, 1441798 )
+}
+__meta__ = {
+"_editor_clip_": 0,
+"_editor_floor_": Vector3( 0, 3, 3 )
+}
+
+[node name="Sushicat" type="AnimatedSprite3D" parent="."]
+transform = Transform( 0.74131, 0, -1.85754, 0, 2, 0, 1.85754, 0, 0.74131, 20.6193, -0.396928, -0.689306 )
+frames = SubResource( 34 )
+
+[node name="OmniLight" type="OmniLight" parent="."]
+transform = Transform( -3.87226e-09, 0.995321, -0.0966274, 3.98865e-08, 0.0966274, 0.995321, 1, 1.02141e-14, -4.0074e-08, -100.026, 21.7152, -24.8557 )
+light_color = Color( 0.968627, 0.890196, 0.529412, 1 )
+omni_range = 190.277
+
+[node name="OmniLight2" type="OmniLight" parent="."]
+transform = Transform( -3.87226e-09, 0.995321, -0.0966274, 3.98865e-08, 0.0966274, 0.995321, 1, 1.02141e-14, -4.0074e-08, 87.3849, 21.7152, -24.8557 )
+light_color = Color( 0.968627, 0.890196, 0.529412, 1 )
+omni_range = 190.277
+
+[node name="OmniLight3" type="OmniLight" parent="."]
+transform = Transform( -3.87226e-09, 0.995321, -0.0966274, 3.98865e-08, 0.0966274, 0.995321, 1, 1.02141e-14, -4.0074e-08, 0, 21.715, -0.601631 )
+light_color = Color( 0.968627, 0.890196, 0.529412, 1 )
+omni_range = 190.277
+
+[node name="SpotLight8" type="SpotLight" parent="."]
+transform = Transform( -3.87226e-09, 0.995321, -0.0966274, 3.98865e-08, 0.0966274, 0.995321, 1, 1.24345e-14, -4.0074e-08, -66.7036, 16.7152, -20.8557 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 1.2
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 22.572
+spot_attenuation = 1.18921
+spot_angle = 42.75
+spot_angle_attenuation = 0.659754
+
+[node name="table" parent="." instance=ExtResource( 19 )]
+transform = Transform( -4.37114e-07, 0, 10, 0, 6, 0, -10, 0, -4.37114e-07, -63, -4, -19 )
+
+[node name="bench08" parent="table" instance=ExtResource( 15 )]
+transform = Transform( 1.29277, 0, 0, 0, 0.979987, 0, 0, 0, 1.29277, -0.861483, -0.0026865, 0.0210004 )
+
+[node name="bench09" parent="table" instance=ExtResource( 15 )]
+transform = Transform( 1.29277, 0, 0, 0, 0.979987, 0, 0, 0, 1.29277, 0.938518, -0.0026865, 0.0210004 )
+
+[node name="plateCeramic8" parent="table" instance=ExtResource( 16 )]
+transform = Transform( 1.39114, 0, 5.99792e-09, 0, 8.23512, 0, 5.05996e-09, 0, 1.5118, -0.00566459, 0.769438, 0.0454507 )
+
+[node name="soySauceThing2" parent="table/plateCeramic8" instance=ExtResource( 21 )]
+transform = Transform( 3.7749e-08, 0, -0.5, 0, 0.2, 0, 0.5, 0, 3.7749e-08, -0.203883, -0.0059608, -0.295521 )
+
+[node name="hashiPair" parent="table/plateCeramic8" instance=ExtResource( 6 )]
+transform = Transform( -0.577807, 0, -0.36996, 0, 0.325, 0, 0.310949, 0, -0.577807, 0, -0.00105902, -0.279119 )
+
+[node name="SpotLight9" type="SpotLight" parent="."]
+transform = Transform( -3.87226e-09, 0.995321, -0.0966274, 3.98865e-08, 0.0966274, 0.995321, 1, 1.24345e-14, -4.0074e-08, -35.7036, 16.7152, -64.8557 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 1.2
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 27.789
+spot_attenuation = 1.18921
+spot_angle = 42.75
+spot_angle_attenuation = 0.659754
+
+[node name="table2" parent="." instance=ExtResource( 19 )]
+transform = Transform( -4.37114e-07, 0, 10, 0, 6, 0, -10, 0, -4.37114e-07, -32, -4, -63 )
+
+[node name="bench08" parent="table2" instance=ExtResource( 15 )]
+transform = Transform( 1.29277, 0, 0, 0, 0.979987, 0, 0, 0, 1.29277, -0.861483, -0.0026865, 0.0210004 )
+
+[node name="bench09" parent="table2" instance=ExtResource( 15 )]
+transform = Transform( 1.29277, 0, 0, 0, 0.979987, 0, 0, 0, 1.29277, 0.938518, -0.0026865, 0.0210004 )
+
+[node name="plateCeramic8" parent="table2" instance=ExtResource( 16 )]
+transform = Transform( 1.38834, 0, -0.00549765, 0, 8.23512, 0, 0.00504022, 0, 1.51435, 0.0494313, 0.749542, 0.038873 )
+
+[node name="soySauceThing" parent="table2/plateCeramic8" instance=ExtResource( 21 )]
+transform = Transform( 3.7749e-08, 0, -0.5, 0, 0.2, 0, 0.5, 0, 3.7749e-08, -0.158362, -0.00182418, -0.234334 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="hashiPair" parent="table2/plateCeramic8" instance=ExtResource( 6 )]
+transform = Transform( -0.476313, -0.249283, -0.489237, -0.0295382, 0.317362, -0.0303397, 0.421097, 0, -0.487776, 0.12758, 0.0111249, -0.0511477 )
+
+[node name="SpotLight10" type="SpotLight" parent="."]
+transform = Transform( -3.87226e-09, 0.995321, -0.0966274, 3.98865e-08, 0.0966274, 0.995321, 1, 1.24345e-14, -4.0074e-08, 23.2964, 16.7152, -64.8557 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 1.2
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 27.789
+spot_attenuation = 1.18921
+spot_angle = 42.75
+spot_angle_attenuation = 0.659754
+
+[node name="table3" parent="." instance=ExtResource( 19 )]
+transform = Transform( -4.37114e-07, 0, 10, 0, 6, 0, -10, 0, -4.37114e-07, 27, -4, -63 )
+
+[node name="bench08" parent="table3" instance=ExtResource( 15 )]
+transform = Transform( 1.29277, 0, 0, 0, 0.979987, 0, 0, 0, 1.29277, -0.861483, -0.0026865, 0.0210004 )
+
+[node name="bench09" parent="table3" instance=ExtResource( 15 )]
+transform = Transform( 1.29277, 0, 0, 0, 0.979987, 0, 0, 0, 1.29277, 0.938518, -0.0026865, 0.0210004 )
+
+[node name="SpotLight11" type="SpotLight" parent="."]
+transform = Transform( -3.87226e-09, 0.995321, -0.0966274, 3.98865e-08, 0.0966274, 0.995321, 1, 1.24345e-14, -4.0074e-08, -98.7036, 16.7152, -64.8557 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 1.2
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 27.789
+spot_attenuation = 1.18921
+spot_angle = 42.75
+spot_angle_attenuation = 0.659754
+
+[node name="table4" parent="." instance=ExtResource( 19 )]
+transform = Transform( -4.37114e-07, 0, 10, 0, 6, 0, -10, 0, -4.37114e-07, -95, -4, -63 )
+
+[node name="bench08" parent="table4" instance=ExtResource( 15 )]
+transform = Transform( 1.29277, 0, 0, 0, 0.979987, 0, 0, 0, 1.29277, -0.861483, -0.0026865, 0.0210004 )
+
+[node name="bench09" parent="table4" instance=ExtResource( 15 )]
+transform = Transform( 1.29277, 0, 0, 0, 0.979987, 0, 0, 0, 1.29277, 0.938518, -0.0026865, 0.0210004 )
+
+[node name="SpotLight12" type="SpotLight" parent="."]
+transform = Transform( -3.87226e-09, 0.995321, -0.0966274, 3.98865e-08, 0.0966274, 0.995321, 1, 1.24345e-14, -4.0074e-08, 79.2964, 16.7152, -64.8557 )
+light_color = Color( 0.952941, 0.807843, 0.141176, 1 )
+light_energy = 1.2
+light_indirect_energy = 3.4
+light_specular = 4.9
+spot_range = 27.789
+spot_attenuation = 1.18921
+spot_angle = 42.75
+spot_angle_attenuation = 0.659754
+
+[node name="table5" parent="." instance=ExtResource( 19 )]
+transform = Transform( -4.37114e-07, 0, 10, 0, 6, 0, -10, 0, -4.37114e-07, 83, -4, -63 )
+
+[node name="bench08" parent="table5" instance=ExtResource( 15 )]
+transform = Transform( 1.29277, 0, 0, 0, 0.979987, 0, 0, 0, 1.29277, -0.861483, -0.0026865, 0.0210004 )
+
+[node name="bench09" parent="table5" instance=ExtResource( 15 )]
+transform = Transform( 1.29277, 0, 0, 0, 0.979987, 0, 0, 0, 1.29277, 0.938518, -0.0026865, 0.0210004 )
+
+[node name="plateCeramic8" parent="table5" instance=ExtResource( 16 )]
+transform = Transform( 1.38641, 0, -0.0800739, 0, 8.23512, 0, 0.0734109, 0, 1.51225, -0.0502343, 0.740165, 0.0194511 )
+
+[node name="cup2" parent="table5/plateCeramic8" instance=ExtResource( 23 )]
+transform = Transform( 4.69085e-08, 0, 0.9813, 0, 0.5, 0, -0.825496, 0, 5.20004e-08, -0.193589, -0.00155684, 0.185698 )
+
+[node name="hashiPair" parent="table5/plateCeramic8" instance=ExtResource( 6 )]
+transform = Transform( -0.67, 0, 5.85733e-08, 0, 0.325, 0, -5.85732e-08, 0, -0.670001, 0.0615327, -0.0024705, -0.235051 )
+
+[node name="borderWall" type="CSGMesh" parent="."]
+transform = Transform( 7.829, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 17.1695 )
+mesh = SubResource( 38 )
+material = SubResource( 39 )
+
+[node name="RigidBody" type="RigidBody" parent="borderWall" groups=["BorderWall"]]
+mode = 1
+physics_material_override = SubResource( 37 )
+
+[node name="CollisionShape" type="CollisionShape" parent="borderWall/RigidBody"]
+shape = SubResource( 35 )
 
 [connection signal="finished" from="AudioStreamPlayer" to="." method="_on_AudioStreamPlayer_finished"]

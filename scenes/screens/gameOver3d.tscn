@@ -1,0 +1,220 @@
+[gd_scene load_steps=21 format=2]
+
+[ext_resource path="res://assets/fonts/Deadly Advance.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/fonts/Montserrat-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/models/foodItems/sushi/hossomakiSalmon.glb" type="PackedScene" id=3]
+[ext_resource path="res://assets/models/foodItems/sushi/niguiriShrimp.glb" type="PackedScene" id=4]
+[ext_resource path="res://assets/models/foodItems/sushi/uramakiDragon.glb" type="PackedScene" id=5]
+[ext_resource path="res://assets/models/foodItems/sushi/niguiriSalmon.glb" type="PackedScene" id=6]
+[ext_resource path="res://assets/soundEffects/transition.mp3" type="AudioStream" id=7]
+[ext_resource path="res://assets/songs/oma-wa-mou-lofi.mp3" type="AudioStream" id=8]
+[ext_resource path="res://scripts/GameOver3d.gd" type="Script" id=9]
+
+[sub_resource type="Shader" id=13]
+code = "shader_type canvas_item;
+
+uniform sampler2D noise_img;
+uniform float speed = 2.0;
+uniform vec4 smoke_color: hint_color;
+
+void fragment(){
+	vec2 uv1 = vec2(UV.x + TIME * speed, UV.y);
+	vec2 uv2 = vec2(UV.x - TIME * speed, UV.y + TIME * speed);
+	vec2 uv3 = vec2(UV.x, UV.y + TIME * speed);
+	
+	
+	float noise_r = texture(noise_img, uv1).r;
+	float noise_g = texture(noise_img, uv2).g;
+	float noise_b = texture(noise_img, uv3).b;
+	
+	
+	vec3 new_color = vec3(noise_r, noise_g, noise_b);
+	
+	float new_alpha = noise_r * noise_g * noise_b;
+	
+	//COLOR.a = texture(TEXTURE, UV).a;
+	COLOR.rgb = smoke_color.rgb;
+	COLOR.a = new_alpha * 5.0 * texture(TEXTURE, UV).a;
+}"
+
+[sub_resource type="OpenSimplexNoise" id=17]
+seed = 5
+octaves = 6
+period = 256.0
+persistence = 0.007
+lacunarity = 0.92
+
+[sub_resource type="NoiseTexture" id=14]
+seamless = true
+noise = SubResource( 17 )
+
+[sub_resource type="ShaderMaterial" id=18]
+shader = SubResource( 13 )
+shader_param/speed = 0.1
+shader_param/smoke_color = Color( 0.933333, 0.2, 0.2, 1 )
+shader_param/noise_img = SubResource( 14 )
+
+[sub_resource type="OpenSimplexNoise" id=15]
+seed = 756756
+octaves = 9
+period = 107.7
+persistence = 0.591
+lacunarity = 2.93
+
+[sub_resource type="NoiseTexture" id=19]
+seamless = true
+noise = SubResource( 15 )
+
+[sub_resource type="PanoramaSky" id=16]
+
+[sub_resource type="Environment" id=20]
+background_sky = SubResource( 16 )
+background_color = Color( 0.894118, 0.631373, 0.631373, 1 )
+background_canvas_max_layer = -1
+ambient_light_energy = 1.62
+fog_color = Color( 0.807843, 0.878431, 0.94902, 1 )
+
+[sub_resource type="DynamicFont" id=21]
+size = 120
+outline_size = 15
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=22]
+size = 120
+outline_size = 15
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_top = -64
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=23]
+size = 18
+font_data = ExtResource( 2 )
+
+[node name="GameOver" type="CanvasLayer"]
+script = ExtResource( 9 )
+
+[node name="backgroundTrack" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+volume_db = 8.0
+autoplay = true
+
+[node name="transition" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+volume_db = 11.0
+
+[node name="Background" type="Spatial" parent="."]
+
+[node name="OmniLight" type="OmniLight" parent="Background"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1.11359, 0.319252, 0.701761 )
+light_color = Color( 0.992157, 0.933333, 0.556863, 1 )
+light_energy = 2.6
+
+[node name="ViewportContainer" type="ViewportContainer" parent="Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Viewport" type="Viewport" parent="Background/ViewportContainer"]
+size = Vector2( 1366, 768 )
+transparent_bg = true
+handle_input_locally = false
+render_target_update_mode = 3
+
+[node name="InterpolatedCamera" type="InterpolatedCamera" parent="Background/ViewportContainer/Viewport"]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 1 )
+enabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Background"]
+layer = -1
+
+[node name="Sprite" type="Sprite" parent="Background/CanvasLayer"]
+material = SubResource( 18 )
+position = Vector2( 698.5, 589 )
+scale = Vector2( 2.72852, 2.30078 )
+texture = SubResource( 19 )
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Background"]
+environment = SubResource( 20 )
+
+[node name="uramakiDragon" parent="Background" instance=ExtResource( 5 )]
+transform = Transform( 0.980951, 1.49172, 2.41091, 1.1174, 2.14122, -1.7795, -2.6056, 1.47985, 0.144525, -1.87627, -0.699166, -0.32007 )
+
+[node name="niguiriShrimp" parent="Background" instance=ExtResource( 4 )]
+transform = Transform( 0.980951, 1.49172, 2.41091, 1.1174, 2.14122, -1.7795, -2.6056, 1.47985, 0.144525, -1.87439, -0.207652, -0.879357 )
+
+[node name="hossomakiSalmon" parent="Background" instance=ExtResource( 3 )]
+transform = Transform( -2.05573, 1.91583, -2.84668, 1.33937, 3.50324, 1.39047, 3.15912, -0.238586, -2.44193, -1.69601, 0.0151543, -0.128403 )
+
+[node name="niguiriSalmon" parent="Background" instance=ExtResource( 6 )]
+transform = Transform( -1.5418, 1.43687, -2.13501, 1.00453, 2.62743, 1.04285, 2.36934, -0.17894, -1.83145, -1.39485, 0.224751, -0.358738 )
+
+[node name="uramakiDragon2" parent="Background" instance=ExtResource( 5 )]
+transform = Transform( 1.78427, 2.02745, -1.30608, -2.39712, 1.66939, -0.683345, 0.264972, 1.45003, 2.61289, -1.85813, -0.699166, 2.21828 )
+
+[node name="niguiriShrimp2" parent="Background" instance=ExtResource( 4 )]
+transform = Transform( 0.175406, 2.99482, 0.0178698, -2.95082, 0.169761, 0.513648, 0.511748, -0.0476165, 2.95565, -1.30689, -0.207652, 2.12369 )
+
+[node name="hossomakiSalmon2" parent="Background" instance=ExtResource( 3 )]
+transform = Transform( -3.46629, 0.565387, 1.91445, 1.33937, 3.50324, 1.39047, -1.48016, 1.84599, -3.22513, -2.01584, 0.0151543, 2.24574 )
+
+[node name="niguiriSalmon2" parent="Background" instance=ExtResource( 6 )]
+transform = Transform( -1.79045, 2.22877, 0.909339, 2.33912, 1.87843, 0.0016371, -0.568163, 0.709994, -2.85887, -1.73702, 0.224751, 2.68582 )
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 80
+custom_constants/margin_top = 70
+custom_constants/margin_left = 80
+custom_constants/margin_bottom = 70
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
+margin_left = 80.0
+margin_top = 70.0
+margin_right = 1286.0
+margin_bottom = 698.0
+
+[node name="Game" type="Label" parent="Control/MarginContainer/VBoxContainer"]
+margin_right = 1206.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 0, 300 )
+custom_colors/font_color = Color( 0.988235, 0.0941176, 0.262745, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+custom_colors/font_color_shadow = Color( 0.780392, 0.678431, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 2
+custom_constants/shadow_as_outline = 0
+custom_fonts/font = SubResource( 21 )
+text = "Game"
+align = 1
+valign = 2
+
+[node name="Over" type="Label" parent="Control/MarginContainer/VBoxContainer"]
+margin_top = 304.0
+margin_right = 1206.0
+margin_bottom = 402.0
+custom_colors/font_color = Color( 0.0470588, 0.52549, 0.784314, 1 )
+custom_colors/font_color_shadow = Color( 0.780392, 0.678431, 0, 1 )
+custom_constants/shadow_offset_x = 2
+custom_constants/line_spacing = 0
+custom_constants/shadow_offset_y = 2
+custom_constants/shadow_as_outline = 0
+custom_fonts/font = SubResource( 22 )
+text = "Over"
+align = 1
+
+[node name="Back menu" type="Label" parent="Control/MarginContainer/VBoxContainer"]
+margin_top = 406.0
+margin_right = 1206.0
+margin_bottom = 606.0
+rect_min_size = Vector2( 0, 200 )
+rect_clip_content = true
+custom_fonts/font = SubResource( 23 )
+text = "Press Space to go back to menu..."
+align = 1
+valign = 2
+clip_text = true

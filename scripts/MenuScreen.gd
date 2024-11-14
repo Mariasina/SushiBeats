@@ -1,16 +1,16 @@
-extends Node2D
+extends CanvasLayer
 
+onready var transition = $transition
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
-
+	#transition.connect("finished", self, "_on_transition_finished")
+	transition.stream.loop = false # Desativa o loop diretamente no código, se não tiver certeza da configuração
 
 func _process(delta):
 	if Input.is_action_just_pressed("hit"):
-		get_tree().change_scene("res://scenes/screens/album.tscn")
+		transition.play()
+		SceneTransition.change_scene("res://scenes/playSong.tscn")
+		  # Desativa _process para garantir que o som toque apenas uma vez
+
+func _on_transition_finished():  
+	pass

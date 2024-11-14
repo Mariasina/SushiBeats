@@ -1,0 +1,29 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type spatial;
+
+uniform sampler2D noise_img;
+uniform float speed = 2.0;
+uniform vec4 smoke_color : hint_color;
+uniform vec4 background_color : hint_color = vec4(0.0, 0.0, 1.0, 1.0); // Fundo azul opaco
+
+void fragment() {
+    vec2 uv1 = vec2(UV.x + TIME * speed, UV.y);
+    vec2 uv2 = vec2(UV.x - TIME * speed, UV.y + TIME * speed);
+    vec2 uv3 = vec2(UV.x, UV.y + TIME * speed);
+
+    float noise_r = texture(noise_img, uv1).r;
+    float noise_g = texture(noise_img, uv2).g;
+    float noise_b = texture(noise_img, uv3).b;
+
+    vec3 new_color = vec3(noise_r, noise_g, noise_b);
+    float new_alpha = noise_r * noise_g * noise_b;
+
+    // Combinação entre a cor de fumaça e o fundo azul
+    vec3 final_color = mix(background_color.rgb, smoke_color.rgb * new_color, new_alpha);
+    
+    ALBEDO = final_color;
+    ALPHA = background_color.a; // Mantém o fundo opaco
+}
+"

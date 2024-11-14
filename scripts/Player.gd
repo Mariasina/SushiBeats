@@ -37,3 +37,4 @@ func change_color(new_color: Color):
 			print("Material não encontrado ou não é um SpatialMaterial!")
 	else:
 		print("MeshInstance não encontrado!")
+##player
