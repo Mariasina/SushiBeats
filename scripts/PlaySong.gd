@@ -5,7 +5,6 @@ var particle = preload("res://scenes/foodParticles.tscn")
 # Referência aos nós
 var audio_player
 var timer
-onready var time = $time
 onready var sushicat = $Sushicat
 onready var knife = $knife
 onready var label_score = get_node("Control/MarginContainer/VBoxContainer/score")
@@ -34,6 +33,7 @@ func _process(delta):
 	knife_sound()
 	
 func _ready():
+	Global.score = 0
 	# Calcule o atraso uma vez ao iniciar a cena
 	time_delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 	

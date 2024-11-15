@@ -18,11 +18,13 @@ config/icon="res://icon.png"
 
 Global="*res://scripts/Global.gd"
 SceneTransition="*res://scenes/screens/transition.tscn"
+Preloader="*res://scripts/preloader.gd"
 
 [display]
 
 window/size/width=1366
 window/size/height=768
+window/stretch/mode="viewport"
 
 [gui]
 

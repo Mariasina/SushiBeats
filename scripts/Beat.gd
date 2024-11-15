@@ -5,7 +5,7 @@ var player_body = null  # Variável para armazenar o corpo do jogador
 var speed = 6
 export var key_associated = ""  # Variável para armazenar a tecla associada ao beat
 export var is_touching = false  # Indica se o beat está em contato com o BeatWall
-var models = []
+var models := []
 var glb_folder_path = "res://assets/models/foodItems/sushi"
 var food_node # Referência ao CSGMesh
 onready var sushiHit = $sushiHit
@@ -61,17 +61,21 @@ func load_all_glb_meshes_from_folder():
 			#print("Verificando arquivo:", file_name)
 
 			# Ignora diretórios e arquivos que não são .glb
-			if !dir.current_is_dir() and file_name.ends_with(".glb"):
+			if !dir.current_is_dir() and file_name.ends_with(".import"):
 				var scene_path = glb_folder_path + "/" + file_name
-				var scene = load(scene_path) as PackedScene
+#				 = load(scene_path) as PackedScene
+				var scene : PackedScene
+				scene = ResourceLoader.load(scene_path, ".import")
+				
 				if scene:
 					# Instancia a cena e obtém o MeshInstance
 					#print(file_name.replace('.glb', ''))
 					var instance = scene.instance()
-					var mesh_instance = instance.get_node(file_name.replace('.glb', ''))  # Ajuste o nome se necessário
+					var mesh_instance : MeshInstance = instance.get_node(file_name.replace('.glb', '')) # Ajuste o nome se necessário
 
 					# Adiciona a mesh extraída na array glb_meshes
 					if mesh_instance and mesh_instance.mesh:
+						
 						models.append(mesh_instance.mesh)
 						#print("Mesh adicionada da cena: " + file_name)
 					else:
