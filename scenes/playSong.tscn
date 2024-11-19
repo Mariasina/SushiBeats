@@ -242,13 +242,12 @@ text = "0"
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
 margin_top = 28.0
 margin_right = 1306.0
-margin_bottom = 28.0
+margin_bottom = 628.0
 alignment = 1
 
 [node name="A" type="Label" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
-visible = false
-margin_left = 503.0
-margin_right = 803.0
+margin_left = 199.0
+margin_right = 499.0
 margin_bottom = 600.0
 rect_min_size = Vector2( 300, 600 )
 custom_fonts/font = SubResource( 22 )
@@ -257,9 +256,8 @@ align = 1
 valign = 2
 
 [node name="S" type="Label" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
-visible = false
-margin_left = 655.0
-margin_right = 955.0
+margin_left = 503.0
+margin_right = 803.0
 margin_bottom = 600.0
 rect_min_size = Vector2( 300, 600 )
 custom_fonts/font = SubResource( 22 )
@@ -268,7 +266,6 @@ align = 1
 valign = 2
 
 [node name="D" type="Label" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
-visible = false
 margin_left = 807.0
 margin_right = 1107.0
 margin_bottom = 600.0
