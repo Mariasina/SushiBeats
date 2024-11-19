@@ -1,9 +1,8 @@
-[gd_scene load_steps=67 format=2]
+[gd_scene load_steps=66 format=2]
 
 [ext_resource path="res://assets/songs/caramel-dancing.mp3" type="AudioStream" id=1]
 [ext_resource path="res://scripts/PlaySong.gd" type="Script" id=2]
 [ext_resource path="res://scenes/beatWall.tscn" type="PackedScene" id=3]
-[ext_resource path="res://assets/fonts/Montserrat-Regular.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://assets/models/hashi.glb" type="PackedScene" id=5]
 [ext_resource path="res://assets/models/hashiPair.glb" type="PackedScene" id=6]
 [ext_resource path="res://assets/texures/esteira-vertical.png" type="Texture" id=7]
@@ -40,13 +39,12 @@
 [ext_resource path="res://assets/soundEffects/winning-82808.mp3" type="AudioStream" id=38]
 
 [sub_resource type="DynamicFont" id=21]
-size = 23
+size = 40
 font_data = ExtResource( 30 )
 
-[sub_resource type="DynamicFont" id=22]
+[sub_resource type="DynamicFont" id=40]
 size = 30
-extra_spacing_space = 50
-font_data = ExtResource( 4 )
+font_data = ExtResource( 30 )
 
 [sub_resource type="Shader" id=17]
 code = "shader_type canvas_item;
@@ -235,14 +233,14 @@ margin_bottom = 738.0
 
 [node name="score" type="Label" parent="Control/MarginContainer/VBoxContainer"]
 margin_right = 1306.0
-margin_bottom = 24.0
+margin_bottom = 40.0
 custom_fonts/font = SubResource( 21 )
 text = "0"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
-margin_top = 28.0
+margin_top = 44.0
 margin_right = 1306.0
-margin_bottom = 628.0
+margin_bottom = 644.0
 alignment = 1
 
 [node name="A" type="Label" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
@@ -250,7 +248,7 @@ margin_left = 199.0
 margin_right = 499.0
 margin_bottom = 600.0
 rect_min_size = Vector2( 300, 600 )
-custom_fonts/font = SubResource( 22 )
+custom_fonts/font = SubResource( 40 )
 text = "A"
 align = 1
 valign = 2
@@ -260,7 +258,7 @@ margin_left = 503.0
 margin_right = 803.0
 margin_bottom = 600.0
 rect_min_size = Vector2( 300, 600 )
-custom_fonts/font = SubResource( 22 )
+custom_fonts/font = SubResource( 40 )
 text = "S"
 align = 1
 valign = 2
@@ -270,7 +268,7 @@ margin_left = 807.0
 margin_right = 1107.0
 margin_bottom = 600.0
 rect_min_size = Vector2( 300, 600 )
-custom_fonts/font = SubResource( 22 )
+custom_fonts/font = SubResource( 40 )
 text = "D"
 align = 1
 valign = 2
@@ -461,13 +459,13 @@ spot_attenuation = 1.18921
 spot_angle = 29.25
 spot_angle_attenuation = 0.659754
 
-[node name="plateCeramic6" parent="Table" instance=ExtResource( 16 )]
+[node name="plate2" parent="Table" instance=ExtResource( 16 )]
 transform = Transform( -4.83735e-09, 0, -0.131553, 0, 1, 0, 0.110666, 0, -5.75038e-09, 0.00558187, 0.067561, -0.169729 )
 
-[node name="hashi" parent="Table/plateCeramic6" instance=ExtResource( 5 )]
+[node name="hashi" parent="Table/plate2" instance=ExtResource( 5 )]
 transform = Transform( 0.67, 0, 1.42109e-14, 0, 0.325, 0, -3.55271e-15, 0, 0.67, -0.0443619, -0.00290236, 0.189698 )
 
-[node name="hashi2" parent="Table/plateCeramic6" instance=ExtResource( 5 )]
+[node name="hashi2" parent="Table/plate2" instance=ExtResource( 5 )]
 transform = Transform( 0.67, 0, 1.42109e-14, 0, 0.325, 0, -3.55271e-15, 0, 0.67, -0.0443619, -0.00290236, -0.185274 )
 
 [node name="SpotLight3" type="SpotLight" parent="Table"]
