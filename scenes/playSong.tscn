@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=2]
+[gd_scene load_steps=67 format=2]
 
 [ext_resource path="res://assets/songs/caramel-dancing.mp3" type="AudioStream" id=1]
 [ext_resource path="res://scripts/PlaySong.gd" type="Script" id=2]
@@ -8,15 +8,15 @@
 [ext_resource path="res://assets/models/hashiPair.glb" type="PackedScene" id=6]
 [ext_resource path="res://assets/texures/esteira-vertical.png" type="Texture" id=7]
 [ext_resource path="res://assets/shaders/track.tres" type="Shader" id=8]
-[ext_resource path="res://assets/texures/sushicat-both.png" type="Texture" id=9]
+[ext_resource path="res://assets/sprites/sushicat-both.png" type="Texture" id=9]
 [ext_resource path="res://assets/models/sushiServingBoard.glb" type="PackedScene" id=10]
 [ext_resource path="res://assets/texures/tiles.png" type="Texture" id=11]
-[ext_resource path="res://assets/texures/sushicat-left.png" type="Texture" id=12]
-[ext_resource path="res://assets/texures/sushicat-right.png" type="Texture" id=13]
+[ext_resource path="res://assets/sprites/sushicat-left.png" type="Texture" id=12]
+[ext_resource path="res://assets/sprites/sushicat-right.png" type="Texture" id=13]
 [ext_resource path="res://assets/models/cuttingStone.glb" type="PackedScene" id=14]
 [ext_resource path="res://assets/models/bench02.glb" type="PackedScene" id=15]
 [ext_resource path="res://assets/models/plateCeramic.glb" type="PackedScene" id=16]
-[ext_resource path="res://assets/texures/sushicat.png" type="Texture" id=17]
+[ext_resource path="res://assets/sprites/sushicat.png" type="Texture" id=17]
 [ext_resource path="res://assets/models/customItems/wallLib.tres" type="MeshLibrary" id=18]
 [ext_resource path="res://assets/models/table.glb" type="PackedScene" id=19]
 [ext_resource path="res://assets/models/foodItems/hossomakiSalmonRoll.glb" type="PackedScene" id=20]
@@ -30,7 +30,14 @@
 [ext_resource path="res://assets/models/foodItems/sushi/niguiriSalmonWithNori.glb" type="PackedScene" id=28]
 [ext_resource path="res://assets/models/foodItems/sushi/uramakiDragon.glb" type="PackedScene" id=29]
 [ext_resource path="res://assets/fonts/batmfa__.ttf" type="DynamicFontData" id=30]
-[ext_resource path="res://assets/soundEffects/sushi-hit.mp3" type="AudioStream" id=31]
+[ext_resource path="res://assets/soundEffects/knife.mp3" type="AudioStream" id=31]
+[ext_resource path="res://assets/models/foodItems/sushi/hossomakiTuna.glb" type="PackedScene" id=32]
+[ext_resource path="res://assets/models/foodItems/sushi/hossomakiCocumber.glb" type="PackedScene" id=33]
+[ext_resource path="res://assets/models/foodItems/sushi/uramakiTuna.glb" type="PackedScene" id=34]
+[ext_resource path="res://assets/soundEffects/sushi-hit.mp3" type="AudioStream" id=35]
+[ext_resource path="res://assets/sprites/sushicat-game-poster.png" type="Texture" id=36]
+[ext_resource path="res://assets/sprites/cat-eating-sushi.png" type="Texture" id=37]
+[ext_resource path="res://assets/soundEffects/winning-82808.mp3" type="AudioStream" id=38]
 
 [sub_resource type="DynamicFont" id=21]
 size = 23
@@ -194,7 +201,15 @@ script = ExtResource( 2 )
 
 [node name="knife" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 31 )
-volume_db = 9.223
+volume_db = -2.364
+
+[node name="hundred" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 38 )
+volume_db = -2.364
+
+[node name="sushiHit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 35 )
+volume_db = -2.364
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 1 )
@@ -314,7 +329,7 @@ transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.07852
 transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 3.84121, 0, 1.66406 )
 
 [node name="Ceiling" type="CSGMesh" parent="."]
-transform = Transform( 137.439, 0, 0, 0, 0.986067, 0, 0, 0, 135.161, 0, 41.6345, 25.0594 )
+transform = Transform( 137.439, 0, 0, 0, 0.986067, 0, 0, 0, 135.161, 0.508314, 42.0691, 24.3312 )
 mesh = SubResource( 29 )
 
 [node name="TrackA" type="MeshInstance" parent="."]
@@ -403,14 +418,40 @@ spot_angle_attenuation = 0.659754
 [node name="Table" parent="." instance=ExtResource( 10 )]
 transform = Transform( 115.069, 0, 0, 0, 49.4107, 0, 0, 0, 125.513, -3.6887, -4.00253, -1.03621 )
 
-[node name="plateCeramic7" parent="Table" instance=ExtResource( 16 )]
-transform = Transform( -4.83735e-09, 0, -0.131553, 0, 1, 0, 0.110666, 0, -5.75038e-09, 0.0905946, 0.067561, -0.169729 )
+[node name="sushiEatingCat1" type="Sprite3D" parent="Table"]
+transform = Transform( 0.0232047, -4.32868e-06, -0.0226113, 0, 0.04355, -1.95051e-05, -0.00667288, 1.26194e-05, 0.0659188, 0.0832779, 0.0450417, -0.22182 )
+visible = false
+texture = ExtResource( 37 )
 
-[node name="cup" parent="Table/plateCeramic7" instance=ExtResource( 23 )]
+[node name="sushiEatingCat2" type="Sprite3D" parent="Table"]
+transform = Transform( 0.00527205, 9.76833e-06, 0.0510261, 0.000347499, 0.0410538, -0.000830374, -0.0166394, 9.48273e-05, 0.0388805, -0.157735, 0.0300884, 0.0510813 )
+visible = false
+texture = ExtResource( 37 )
+
+[node name="plate1" parent="Table" instance=ExtResource( 16 )]
+transform = Transform( -4.83735e-09, 0, -0.131553, 0, 1, 0, 0.110666, 0, -5.75038e-09, 0.0905946, 0.067561, -0.169729 )
+visible = false
+
+[node name="cup" parent="Table/plate1" instance=ExtResource( 23 )]
 transform = Transform( 0.9, 0, -9.9282e-09, 0, 0.5, 0, 9.92823e-09, 0, 0.9, 0.157435, -0.00155684, 0.221395 )
 
-[node name="hashiPair" parent="Table/plateCeramic7" instance=ExtResource( 6 )]
+[node name="hashiPair" parent="Table/plate1" instance=ExtResource( 6 )]
 transform = Transform( 0.67, 0, -1.2279e-14, 0, 0.325, 0, 1.2279e-14, 0, 0.67, -0.0585474, -0.00155684, 0.221395 )
+
+[node name="hossomakiSalmon" parent="Table/plate1" instance=ExtResource( 22 )]
+transform = Transform( 1, 0, 1.27898e-13, 0, 0.178, 0, 3.55271e-14, 0, 1, 0.0620654, 0.00674373, 0.00221974 )
+
+[node name="hossomakiCocumber" parent="Table/plate1" instance=ExtResource( 33 )]
+transform = Transform( 1, 0, 7.81597e-14, 0, 0.178294, 0, 3.55271e-14, 0, 1, -0.0519887, 0.00633608, 0.0389895 )
+
+[node name="hossomakiTuna" parent="Table/plate1" instance=ExtResource( 32 )]
+transform = Transform( 1, 0, 4.61853e-14, 0, 0.178, 0, 2.13163e-14, 0, 1, 0, 0.00611861, 0.0951702 )
+
+[node name="uramakiDragon" parent="Table/plate1" instance=ExtResource( 29 )]
+transform = Transform( 0.119879, 0.683819, 2.5038e-08, -0.176953, 0.0247635, 9.19473e-09, 1.77183e-08, -2.51448e-08, 0.601734, -0.0494442, 0.0102128, -0.0828891 )
+
+[node name="uramakiTuna" parent="Table/plate1" instance=ExtResource( 34 )]
+transform = Transform( 0.00189355, 0.733701, 3.6521e-08, -0.195788, 0.00639415, 1.01734e-08, 2.58444e-08, -2.69791e-08, 0.704738, 0.0442529, 0.0132217, -0.0637935 )
 
 [node name="SpotLight2" type="SpotLight" parent="Table"]
 transform = Transform( -3.36516e-11, 0.00864979, -0.000839737, 8.07244e-10, 0.0019556, 0.0201438, 0.0079673, -2.12292e-17, -3.19282e-10, -0.00243497, 0.233349, -0.169729 )
@@ -716,5 +757,9 @@ physics_material_override = SubResource( 37 )
 
 [node name="CollisionShape" type="CollisionShape" parent="borderWall/RigidBody"]
 shape = SubResource( 35 )
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform( -8.74228e-08, 0, 2, 0, 2, 0, -2, 0, -8.74228e-08, -127.242, 16.118, -65.4142 )
+texture = ExtResource( 36 )
 
 [connection signal="finished" from="AudioStreamPlayer" to="." method="_on_AudioStreamPlayer_finished"]

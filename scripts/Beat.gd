@@ -61,11 +61,11 @@ func load_all_glb_meshes_from_folder():
 			#print("Verificando arquivo:", file_name)
 
 			# Ignora diretórios e arquivos que não são .glb
-			if !dir.current_is_dir() and file_name.ends_with(".import"):
+			if !dir.current_is_dir() and file_name.ends_with(".glb"):
 				var scene_path = glb_folder_path + "/" + file_name
 #				 = load(scene_path) as PackedScene
 				var scene : PackedScene
-				scene = ResourceLoader.load(scene_path, ".import")
+				scene = ResourceLoader.load(scene_path, ".glb")
 				
 				if scene:
 					# Instancia a cena e obtém o MeshInstance

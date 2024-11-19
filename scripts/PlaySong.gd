@@ -7,7 +7,12 @@ var audio_player
 var timer
 onready var sushicat = $Sushicat
 onready var knife = $knife
+onready var hundred = $hundred
+onready var sushiHit = $sushiHit
 onready var label_score = get_node("Control/MarginContainer/VBoxContainer/score")
+onready var plate1 = get_node("Table/plate1")
+onready var sushieatingcat1 = get_node("Table/sushiEatingCat1")
+onready var sushieatingcat2 = get_node("Table/sushiEatingCat2")
 
 # Variáveis para gravação
 var recording = false
@@ -19,6 +24,8 @@ var beats_in_contact = []
 var delay = 4  # 5 segundos de atraso para começar a música
 var game_start_time = 0  # Armazena o tempo de início do jogo
 var time_delay = 0.0  # Variável para armazenar o atraso
+var all_beats = 0
+var total_score = 0
 
 
 func _process(delta):
@@ -31,9 +38,14 @@ func _process(delta):
 	generate_level()
 	move_beat_wall()
 	knife_sound()
+	control_enviroment()
 	
 func _ready():
 	Global.score = 0
+	read_file()
+	all_beats = events.size()
+	total_score = all_beats * 5
+	
 	# Calcule o atraso uma vez ao iniciar a cena
 	time_delay = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 	
@@ -42,10 +54,11 @@ func _ready():
 	timer = $Timer
 	audio_player.stream.loop = false
 	knife.stream.loop = false
+	sushiHit.stream.loop = false
+	hundred.stream.loop = false
 
 	# Configuração adicional
 	timer.wait_time = 0.1
-	read_file()
 	game_start_time = OS.get_ticks_msec()
 	timer.start()
 	yield(get_tree().create_timer(delay), "timeout")
@@ -141,15 +154,44 @@ func knife_sound():
 		var latency = AudioServer.get_time_to_next_mix() + AudioServer.get_output_latency()
 		knife.play()
 		yield(get_tree().create_timer(latency), "timeout")  # Aguardar pela compensação da latência
-		
 
-	
+
 func _on_beat_hit(beat):
 	Global.score += 5
 	Global.misses = 0
 
-	#knife.play()
+	sushiHit.play()
 	var local_particle = particle.instance()
 	local_particle.translation = beat.translation
 	local_particle.emitting = true
 	add_child(local_particle)
+	
+func control_enviroment():
+	if total_score == 0:
+		print("Total score ainda não foi calculado.")
+		return
+
+	var percentage = float(Global.score) / float(total_score)
+
+	print("Score:", Global.score, "Total Score:", total_score, "Percentage:", percentage)
+
+	if percentage >= 0.1 and percentage <= 0.25:
+		print("Maior q 10% e menor q 25%")
+		plate1.visible = true
+		sushieatingcat1.visible = true
+		
+	elif percentage > 0.25 and percentage <= 0.5:
+		print("Maior q 25% e menor q 50%")
+	elif percentage > 0.5 and percentage <= 0.75:
+		print("Maior q 50% e menor q 75%")
+		sushieatingcat2.visible = true
+	elif percentage > 0.75 and percentage < 1:
+		print("Maior q 75% e menor q 99%")
+	elif percentage == 1:
+		print("100%")
+		hundred.play()
+	else:
+		print("Menor que 10% ou maior que 50%")
+
+
+

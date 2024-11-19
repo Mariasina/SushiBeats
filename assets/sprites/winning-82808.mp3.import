@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/winning-82808.mp3-061a47872d0ca6858a2f75e573bcfd83.mp3str"
+
+[deps]
+
+source_file="res://assets/sprites/winning-82808.mp3"
+dest_files=[ "res://.import/winning-82808.mp3-061a47872d0ca6858a2f75e573bcfd83.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
